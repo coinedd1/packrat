@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.con/coinedd1/packrat/cmd"
+	"github.com/coinedd1/packrat/cmd"
 )
 
 func main() {

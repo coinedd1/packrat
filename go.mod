@@ -1,4 +1,4 @@
-module github.com/coinedd1/packrat.git
+module github.com/coinedd1/packrat
 
 go 1.26.4
 

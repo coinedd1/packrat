@@ -1,2 +1,4 @@
 # packrat
-A pacman wrapper written in Go
+A pacman CLI wrapper written in Go
+
+More information soon.

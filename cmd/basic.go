@@ -9,7 +9,7 @@ import (
 
 var installCmd = &cobra.Command{
 	Use:     "install <package(s)>",
-	Aliases: []string{"i", "in", "ins", "-S"},
+	Aliases: []string{"i", "in", "ins", "S"},
 	Short:   "Install a package from the Arch Linux repository",
 	Args:    cobra.MinimumNArgs(1),
 	RunE: func(c *cobra.Command, args []string) error {
@@ -20,7 +20,7 @@ var installCmd = &cobra.Command{
 
 var updateCmd = &cobra.Command{
 	Use:     "update <package(s)>",
-	Aliases: []string{"upd", "u", "-Syu"},
+	Aliases: []string{"upd", "u", "Syu"},
 	Short:   "Update packages in the Arch Linux repository",
 	Args:    cobra.MinimumNArgs(0),
 	RunE: func(c *cobra.Command, args []string) error {
@@ -31,7 +31,7 @@ var updateCmd = &cobra.Command{
 
 var uninstallCmd = &cobra.Command{
 	Use:     "uninstall <package(s)>",
-	Aliases: []string{"-Rns", "rm", "remove", "delete"},
+	Aliases: []string{"Rns", "rm", "remove", "delete"},
 	Short:   "Delete an existing package from your system",
 	RunE: func(c *cobra.Command, args []string) error {
 		pacArgs := append([]string{"-Rns"}, args...)
@@ -41,7 +41,7 @@ var uninstallCmd = &cobra.Command{
 
 var queryCmd = &cobra.Command{
 	Use:     "query <keyword>",
-	Aliases: []string{"-Q", "q", "qu"},
+	Aliases: []string{"Q", "q", "qu"},
 	Short:   "Query pacman and search through existing packages on your system",
 	RunE: func(c *cobra.Command, args []string) error {
 		pacArgs := append([]string{"-Q"}, args...)
@@ -57,13 +57,31 @@ var queryCmd = &cobra.Command{
 	},
 }
 
+var searchCmd = &cobra.Command{
+	Use:     "search <keyword>",
+	Aliases: []string{"Si", "srch", "lookup"},
+	Short:   "Search the arch repos for information on a specific package",
+	RunE: func(c *cobra.Command, args []string) error {
+		pacArgs := append([]string{"-Si"}, args...)
+		out, err := run.CmdPrint(pacArgs)
+		if err != nil {
+			fmt.Println("search: package", args, "not found")
+			return err
+		}
+		if out != "" {
+			fmt.Println(out)
+		}
+		return nil
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(installCmd, updateCmd, uninstallCmd, queryCmd)
+	rootCmd.AddCommand(installCmd, updateCmd, uninstallCmd, queryCmd, searchCmd)
 }
 
 var cleanCmd = &cobra.Command{
 	Use:     "clean",
-	Aliases: []string{"-Sc", "clear-cache"},
+	Aliases: []string{"Sc", "clear-cache"},
 	Short:   "Delete cached files for unused packages",
 	Args:    cobra.MaximumNArgs(0),
 	RunE: func(c *cobra.Command, args []string) error {
@@ -74,7 +92,7 @@ var cleanCmd = &cobra.Command{
 
 var cleanAllCmd = &cobra.Command{
 	Use:     "all",
-	Aliases: []string{"-Scc", "clear-cache-all"},
+	Aliases: []string{"Scc", "clear-cache-all"},
 	Short:   "Delete cached files for used AND unused packages",
 	Args:    cobra.MaximumNArgs(0),
 	RunE: func(c *cobra.Command, args []string) error {

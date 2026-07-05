@@ -17,7 +17,7 @@ func SudoStdTerminal(line ...string) error {
 	return cmd.Run()
 }
 
-func CmdPrint(line ...string) (string, error) {
+func CmdPrint(line []string) (string, error) {
 	out, err := exec.Command("pacman", line...).CombinedOutput()
 	if err != nil {
 		return "", fmt.Errorf("pacman: %w", err)

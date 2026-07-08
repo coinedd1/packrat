@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
+	"os"
+	"os/exec"
 
 	run "github.com/coinedd1/packrat/internal"
 	"github.com/spf13/cobra"
@@ -75,8 +78,28 @@ var searchCmd = &cobra.Command{
 	},
 }
 
+var autoRemoveCmd = &cobra.Command{
+	Use:     "autoremove",
+	Aliases: []string{"purge", "removeorphans"},
+	Short:   "Remove orphaned packages",
+	Args:    cobra.MaximumNArgs(0),
+	RunE: func(c *cobra.Command, args []string) error {
+		getOrphans := exec.Command("pacman", "-Qtdq")
+		out, err := getOrphans.Output()
+		if err != nil {
+			return err
+		}
+
+		removeOrphans := exec.Command("sudo", "pacman", "-Rns", "-")
+		removeOrphans.Stdin = bytes.NewReader(out)
+		removeOrphans.Stdout = os.Stdout
+		removeOrphans.Stderr = os.Stderr
+		return removeOrphans.Run()
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(installCmd, updateCmd, uninstallCmd, queryCmd, searchCmd)
+	rootCmd.AddCommand(installCmd, updateCmd, uninstallCmd, queryCmd, searchCmd, autoRemoveCmd)
 }
 
 var cleanCmd = &cobra.Command{

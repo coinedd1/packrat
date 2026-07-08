@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:           "packrat",
 	Short:         "pacman wrapper written in Go",
-	Long:          "Wrapper that offers human-readable ways to run pacman package manager commands on an Arch-based system. Includes installing, updating, pruning, etc.",
+	Long:          "Wrapper that offers human-readable ways to run pacman package manager commands on an Arch-based system. Includes installing, updating, removing orphans, etc.",
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
